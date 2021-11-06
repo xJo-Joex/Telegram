@@ -2,9 +2,10 @@ const express = require("express");
 const multer = require("multer");
 const controller = require("./controller");
 const router = express.Router();
+const config = require("../../config");
 
 const upload = multer({
-  dest: "./public/files", //le digo donge guarde los archivos
+  dest: `./public${config.filesRoute}`, //le digo donge guarde los archivos
 });
 
 const response = require("../../network/response");
@@ -12,7 +13,7 @@ router.get("/", function (req, res) {
   // console.log(req.body);
   // console.log(req.query);
   // console.log(req.headers);
-  const filterMessages = req.query.chat|| null
+  const filterMessages = req.query.chat || null;
   // console.log(req.params.idChat)
   controller
     .getMessages(filterMessages)

@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
+
+const config = require("./config");
 const cors = require("cors");
 //modulo de express para trabajar con el body de la peticion de manera sencilla
 const bodyParser = require("body-parser");
@@ -12,9 +14,7 @@ const router = require("./network/routes");
 //funcion para la coneccion con la base de datos
 const db = require("./db");
 
-db(
-  "mongodb+srv://admin:1234@cluster0.vjgri.mongodb.net/telegram?retryWrites=true&w=majority"
-);
+db(config.dbUrl);
 
 app.use(cors());
 // app.use(bodyParser.json());//esta linea esta en deshuso.
@@ -30,9 +30,11 @@ router(app);
 // });
 
 //para servir estaticos
-app.use("/app", express.static("public"));
+app.use(config.publicRoute, express.static("public"));
 
-server.listen(3000, () => {
+server.listen(config.port, () => {
   console.log("estoy escuchando");
 });
-console.log("la aplicacion esta escuchando en el http://localhost:3000");
+console.log(
+  `la aplicacion esta escuchando en el ${config.host}:${config.port}`
+);
